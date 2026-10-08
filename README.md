@@ -2,6 +2,8 @@
 
 基于课程指定的 `tyrchen/geektime-bootcamp-ai/w5/pg-mcp`，补齐第五章第四节 Codex Review 指出的功能。实现与验证详见 [作业完成说明](HOMEWORK.md)。测试记录在 `test-results.xml`，覆盖率在 `coverage.json` 和 `htmlcov/index.html`。
 
+实际运行截图见 [作业运行效果图](screenshots/README.md)。
+
 ## 安装与运行
 
 支持 Python 3.12+；本次在 Windows / Python 3.13 中验证。依赖已写入 `uv.lock`，MCP 使用兼容课程接口的 1.x。
