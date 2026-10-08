@@ -79,9 +79,14 @@ class OpenAIConfig(SectionSettings):
         api_key_str = v.get_secret_value()
         if not api_key_str or not api_key_str.strip():
             raise ValueError("OpenAI API key must not be empty")
-        if not api_key_str.startswith("sk-"):
-            raise ValueError("OpenAI API key must start with 'sk-'")
         return v
+
+    @model_validator(mode="after")
+    def validate_provider_key(self) -> "OpenAIConfig":
+        """Custom providers may use their own authentication token format."""
+        if self.base_url is None and not self.api_key.get_secret_value().startswith("sk-"):
+            raise ValueError("OpenAI API key must start with 'sk-'")
+        return self
 
 
 class SecurityConfig(SectionSettings):

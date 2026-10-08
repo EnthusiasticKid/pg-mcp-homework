@@ -97,6 +97,11 @@ class TestDatabaseConfig:
 class TestOpenAIConfig:
     """Tests for OpenAIConfig."""
 
+    @pytest.fixture(autouse=True)
+    def isolate_env_file(self, monkeypatch, tmp_path) -> None:
+        """Default-value tests must not read the developer's local credentials."""
+        monkeypatch.chdir(tmp_path)
+
     def test_default_values(self) -> None:
         """Test default configuration values."""
         config = OpenAIConfig(api_key="sk-test123")
@@ -133,6 +138,20 @@ class TestOpenAIConfig:
         """Test API key must start with sk-."""
         with pytest.raises(ValidationError, match="must start with 'sk-'"):
             OpenAIConfig(api_key="invalid-key")
+
+    def test_custom_provider_key_from_env_file(self, tmp_path) -> None:
+        """Local provider tokens and endpoint must load together from .env."""
+        env_file = tmp_path / ".env"
+        env_file.write_text(
+            "OPENAI_API_KEY=local-provider-token\n"
+            "OPENAI_BASE_URL=http://127.0.0.1:1088/v1\n"
+            "OPENAI_MODEL=local-qwen\n",
+            encoding="utf-8",
+        )
+        config = OpenAIConfig(_env_file=env_file)
+        assert config.api_key.get_secret_value() == "local-provider-token"
+        assert config.base_url == "http://127.0.0.1:1088/v1"
+        assert config.model == "local-qwen"
 
     def test_invalid_max_tokens(self) -> None:
         """Test invalid max_tokens is rejected."""
