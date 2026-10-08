@@ -26,6 +26,8 @@ python -m venv .venv
 
 ## 配置与调用
 
+本地 Qwen 等模型可通过 OpenAI 兼容接口连接：在 `.env` 中设置 `OPENAI_BASE_URL`（服务的 `/v1` 地址）和 `OPENAI_MODEL`（服务返回的实际模型 ID）。无鉴权的本地服务可设置 `OPENAI_API_KEY=sk-local`；有鉴权时填写服务要求的密钥。SQL 生成与结果校验使用同一接口。调用较慢时可调高 `OPENAI_TIMEOUT` 和 `VALIDATION_TIMEOUT_SECONDS`，最大为 120 秒和 60 秒。
+
 单库模式保留 `DATABASE_*`。多库模式设置 `DATABASES` JSON：
 
 ```dotenv

@@ -62,6 +62,7 @@ class OpenAIConfig(SectionSettings):
     model_config = SettingsConfigDict(env_prefix="OPENAI_")
 
     api_key: SecretStr = Field(default=SecretStr(""), description="OpenAI API key")
+    base_url: str | None = Field(default=None, description="OpenAI-compatible API base URL")
     model: str = Field(default="gpt-4o-mini", description="Model to use for SQL generation")
     max_tokens: int = Field(default=2000, ge=100, le=4096, description="Maximum tokens in response")
     temperature: float = Field(
